@@ -12,6 +12,7 @@ class LoopPath extends StatelessWidget {
             width: 80,
             height: 80,
             child: ElevatedButton(
+              clipBehavior: Clip.antiAlias,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 0, 0, 0),
                 shape: CircleBorder(
@@ -50,8 +51,9 @@ class LoopPath extends StatelessWidget {
           SizedBox(
             width: 50,
             height: 50,
-            child: IconButton(
-              style: IconButton.styleFrom(
+            child: ElevatedButton(
+              clipBehavior: Clip.antiAlias,
+              style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 0, 0, 0),
                 shape: CircleBorder(
                   side: BorderSide(
@@ -62,7 +64,7 @@ class LoopPath extends StatelessWidget {
                 padding: EdgeInsets.zero,
               ),
               onPressed: /*TODO*/ () => {},
-              icon: Icon(
+              child: Icon(
                 Icons.square_rounded,
                 color: Color.fromARGB(255, 126, 9, 9),
                 size: 30,
@@ -73,6 +75,7 @@ class LoopPath extends StatelessWidget {
             height: 30,
             width: 60,
             child: ElevatedButton(
+              clipBehavior: Clip.antiAlias,
               style: TextButton.styleFrom(
                 backgroundColor: const Color.fromARGB(255, 11, 95, 27),
                 shape: RoundedRectangleBorder(
