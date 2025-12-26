@@ -14,7 +14,7 @@ class MainApp extends StatelessWidget {
       title: 'Vocal Looper',
       theme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color.fromARGB(255, 13, 13, 19),
+        scaffoldBackgroundColor: Color.fromARGB(255, 19, 19, 20),
         colorScheme: const ColorScheme.dark(
           primary: Color(0xFF58A6FF),
           secondary: Color(0xFF7EE787),
@@ -22,15 +22,16 @@ class MainApp extends StatelessWidget {
           error: Color(0xFFF85149),
         ),
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color.fromARGB(255, 17, 17, 25),
+          backgroundColor: Color.fromARGB(255, 19, 19, 20),
           elevation: 0,
         ),
       ),
       home: Scaffold(
+        drawer: Drawer(),
         appBar: AppBar(title: Text('Vocal Looper')),
         body: Center(
           child: SizedBox(
-            height: 700,
+            height: 600,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [for (int i = 0; i < 5; i++) LoopPath()],

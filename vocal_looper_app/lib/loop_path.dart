@@ -4,7 +4,7 @@ class LoopPath extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 300,
+      width: 350,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -42,13 +42,6 @@ class LoopPath extends StatelessWidget {
                       color: Color.fromARGB(255, 61, 62, 63),
                       size: 30,
                     ),
-                    Text(
-                      '/',
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 61, 62, 63),
-                        fontSize: 30,
-                      ),
-                    ),
                     Icon(
                       Icons.pause_circle_filled_rounded,
                       color: Color.fromARGB(255, 61, 62, 63),
@@ -73,6 +66,10 @@ class LoopPath extends StatelessWidget {
                     Color.fromARGB(255, 44, 43, 43),
                   ],
                 ),
+                border: Border.all(
+                  color: Color.fromARGB(255, 53, 54, 54),
+                  width: 2,
+                ),
               ),
               child: ElevatedButton(
                 clipBehavior: Clip.antiAlias,
@@ -96,14 +93,7 @@ class LoopPath extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(10),
-                gradient: LinearGradient(
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.topRight,
-                  colors: [
-                    Color.fromARGB(255, 3, 54, 15),
-                    Color.fromARGB(255, 2, 188, 39),
-                  ],
-                ),
+                color: Color.fromARGB(255, 2, 188, 39),
               ),
               child: ElevatedButton(
                 clipBehavior: Clip.antiAlias,
