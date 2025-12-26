@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import './loop_path.dart';
+import 'package:go_router/go_router.dart';
+import './main_page.dart';
+import './sign_up_page.dart';
 
 void main() {
+  GoRouter.optionURLReflectsImperativeAPIs = true;
   runApp(const MainApp());
 }
 
@@ -10,7 +13,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: _router,
       title: 'Vocal Looper',
       theme: ThemeData(
         brightness: Brightness.dark,
@@ -26,34 +30,18 @@ class MainApp extends StatelessWidget {
           elevation: 0,
         ),
       ),
-      home: Scaffold(
-        drawer: Drawer(
-          /*TODO*/
-          child: ListView(
-            children: [
-              ListTile(leading: Icon(Icons.login), title: Text("Sign in")),
-              //ListTile(leading: Icon(Icons.person), title: Text("Profile")),
-              ListTile(
-                leading: Icon(Icons.music_note),
-                title: Text("Public tracks"),
-              ),
-              ListTile(leading: Icon(Icons.save), title: Text("Saved tracks")),
-              ListTile(leading: Icon(Icons.settings), title: Text("Settings")),
-              ListTile(leading: Icon(Icons.dark_mode), title: Text("Theme")),
-            ],
-          ),
-        ),
-        appBar: AppBar(title: Text('Vocal Looper')),
-        body: Center(
-          child: SizedBox(
-            height: 600,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [for (int i = 0; i < 5; i++) LoopPath()],
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
+
+final _router = GoRouter(
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => MainPage(),
+      routes: [
+        GoRoute(path: 'sign-up', builder: (context, state) => SignUpPage()),
+      ],
+    ),
+  ],
+);
