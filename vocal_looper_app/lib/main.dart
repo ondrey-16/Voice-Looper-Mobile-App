@@ -27,7 +27,22 @@ class MainApp extends StatelessWidget {
         ),
       ),
       home: Scaffold(
-        drawer: Drawer(),
+        drawer: Drawer(
+          /*TODO*/
+          child: ListView(
+            children: [
+              ListTile(leading: Icon(Icons.login), title: Text("Sign in")),
+              //ListTile(leading: Icon(Icons.person), title: Text("Profile")),
+              ListTile(
+                leading: Icon(Icons.music_note),
+                title: Text("Public tracks"),
+              ),
+              ListTile(leading: Icon(Icons.save), title: Text("Saved tracks")),
+              ListTile(leading: Icon(Icons.settings), title: Text("Settings")),
+              ListTile(leading: Icon(Icons.dark_mode), title: Text("Theme")),
+            ],
+          ),
+        ),
         appBar: AppBar(title: Text('Vocal Looper')),
         body: Center(
           child: SizedBox(
