@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'screens/main_page.dart';
-import 'screens/sign_up_page.dart';
+import 'screens/main_screen.dart';
+import 'screens/sign_up_screen.dart';
 
 void main() {
   GoRouter.optionURLReflectsImperativeAPIs = true;
