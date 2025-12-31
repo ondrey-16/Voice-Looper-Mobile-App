@@ -15,7 +15,7 @@ class MainPage extends StatelessWidget {
               title: Text("Sign in"),
               onTap: () {
                 context.pop();
-                context.go('/sign-up');
+                context.go('/sign-in');
               },
             ),
             //ListTile(leading: Icon(Icons.person), title: Text("Profile")),

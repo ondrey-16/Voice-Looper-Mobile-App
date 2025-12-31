@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'screens/main_screen.dart';
 import 'screens/sign_up_screen.dart';
+import 'screens/sign_in_screen.dart';
 
 void main() {
   GoRouter.optionURLReflectsImperativeAPIs = true;
@@ -41,6 +42,7 @@ final _router = GoRouter(
       builder: (context, state) => MainPage(),
       routes: [
         GoRoute(path: 'sign-up', builder: (context, state) => SignUpPage()),
+        GoRoute(path: 'sign-in', builder: (context, state) => SignInPage()),
       ],
     ),
   ],

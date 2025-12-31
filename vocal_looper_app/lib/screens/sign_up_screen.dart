@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../widgets/separated_widget.dart';
 
 class SignUpPage extends StatelessWidget {
   @override
@@ -82,6 +83,7 @@ class SignUpForm extends StatelessWidget {
             child: SizedBox(
               width: 90,
               child: ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                 onPressed: () => context.go('/'),
                 child: Text(
                   'Send',
@@ -93,14 +95,5 @@ class SignUpForm extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class SeparatedWidget extends StatelessWidget {
-  final Widget widget;
-  const SeparatedWidget({super.key, required this.widget});
-  @override
-  Widget build(BuildContext context) {
-    return Padding(padding: EdgeInsets.only(bottom: 60), child: widget);
   }
 }
