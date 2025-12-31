@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import './loop_path.dart';
+import '../widgets/loop_path.dart';
 
 class MainPage extends StatelessWidget {
   @override
