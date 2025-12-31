@@ -16,32 +16,55 @@ class SignUpPage extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.all(30),
           children: [
-            TextFormField(decoration: InputDecoration(labelText: 'Name')),
-            SizedBox(height: 20),
-            TextFormField(decoration: InputDecoration(labelText: 'Last Name')),
-            SizedBox(height: 20),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Email'),
-              keyboardType: TextInputType.emailAddress,
+            SeparatedWidget(
+              widget: TextFormField(
+                decoration: InputDecoration(labelText: 'Name'),
+              ),
             ),
-            SizedBox(height: 20),
+            SeparatedWidget(
+              widget: TextFormField(
+                decoration: InputDecoration(labelText: 'Last Name'),
+              ),
+            ),
+            SeparatedWidget(
+              widget: TextFormField(
+                decoration: InputDecoration(labelText: 'Nickname'),
+              ),
+            ),
+            SeparatedWidget(
+              widget: TextFormField(
+                decoration: InputDecoration(labelText: 'Email'),
+                keyboardType: TextInputType.emailAddress,
+              ),
+            ),
             /*TODO Change birth date form field*/
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Birth Date'),
-              keyboardType: TextInputType.datetime,
+            SeparatedWidget(
+              widget: TextFormField(
+                decoration: InputDecoration(labelText: 'Birth Date'),
+                keyboardType: TextInputType.datetime,
+              ),
             ),
-            SizedBox(height: 20),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Password'),
-              obscureText: true,
+            SeparatedWidget(
+              widget: TextFormField(
+                decoration: InputDecoration(labelText: 'Password'),
+                obscureText: true,
+              ),
             ),
-            SizedBox(height: 20),
+            SeparatedWidget(
+              widget: TextFormField(
+                decoration: InputDecoration(labelText: 'Confirm password'),
+                obscureText: true,
+              ),
+            ),
             Center(
               child: SizedBox(
-                width: 100,
+                width: 90,
                 child: ElevatedButton(
                   onPressed: () => context.go('/'),
-                  child: Text('Send'),
+                  child: Text(
+                    'Send',
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
                 ),
               ),
             ),
@@ -49,5 +72,14 @@ class SignUpPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class SeparatedWidget extends StatelessWidget {
+  final Widget widget;
+  const SeparatedWidget({super.key, required this.widget});
+  @override
+  Widget build(BuildContext context) {
+    return Padding(padding: EdgeInsets.only(bottom: 60), child: widget);
   }
 }
