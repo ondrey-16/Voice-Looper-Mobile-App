@@ -41,6 +41,9 @@ class SignInForm extends StatelessWidget {
               child: SizedBox(
                 width: 90,
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                  ),
                   onPressed: () => context.go('/'),
                   child: Text(
                     'Send',
@@ -56,7 +59,9 @@ class SignInForm extends StatelessWidget {
               width: 250,
               height: 50,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                ),
                 onPressed: () => context.go('/sign-up'),
                 child: Text(
                   'Or create new account',
