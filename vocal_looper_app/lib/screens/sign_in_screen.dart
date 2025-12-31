@@ -19,8 +19,6 @@ class SignInPage extends StatelessWidget {
 }
 
 class SignInForm extends StatelessWidget {
-  final _textController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Form(
