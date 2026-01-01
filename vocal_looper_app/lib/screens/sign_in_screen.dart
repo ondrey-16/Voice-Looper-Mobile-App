@@ -27,7 +27,7 @@ class SignInForm extends StatelessWidget {
         children: [
           SeparatedWidget(
             widget: TextFormField(
-              decoration: InputDecoration(labelText: 'Nickname or email'),
+              decoration: InputDecoration(labelText: 'Nickname'),
             ),
           ),
           SeparatedWidget(
