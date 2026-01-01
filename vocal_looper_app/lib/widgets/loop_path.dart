@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../theme_change_notifier.dart';
 
 class LoopPath extends StatelessWidget {
   @override
@@ -17,10 +19,15 @@ class LoopPath extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.bottomLeft,
                   end: Alignment.topRight,
-                  colors: [
-                    Color.fromARGB(255, 0, 0, 0),
-                    Color.fromARGB(255, 44, 43, 43),
-                  ],
+                  colors: context.watch<ThemeChangeNotifier>().isDark
+                      ? [
+                          Color.fromARGB(255, 0, 0, 0),
+                          Color.fromARGB(255, 44, 43, 43),
+                        ]
+                      : [
+                          Color.fromARGB(255, 255, 255, 255),
+                          Color.fromARGB(255, 82, 82, 82),
+                        ],
                 ),
                 border: Border.all(
                   color: Color.fromARGB(255, 53, 54, 54),
@@ -39,12 +46,16 @@ class LoopPath extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.play_arrow_rounded,
-                      color: Color.fromARGB(255, 61, 62, 63),
+                      color: context.watch<ThemeChangeNotifier>().isDark
+                          ? Color.fromARGB(255, 172, 174, 177)
+                          : Color.fromARGB(255, 57, 57, 58),
                       size: 30,
                     ),
                     Icon(
                       Icons.pause_circle_filled_rounded,
-                      color: Color.fromARGB(255, 61, 62, 63),
+                      color: context.watch<ThemeChangeNotifier>().isDark
+                          ? Color.fromARGB(255, 172, 174, 177)
+                          : Color.fromARGB(255, 57, 57, 58),
                       size: 30,
                     ),
                   ],
@@ -61,10 +72,15 @@ class LoopPath extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.bottomLeft,
                   end: Alignment.topRight,
-                  colors: [
-                    Color.fromARGB(255, 0, 0, 0),
-                    Color.fromARGB(255, 44, 43, 43),
-                  ],
+                  colors: context.watch<ThemeChangeNotifier>().isDark
+                      ? [
+                          Color.fromARGB(255, 0, 0, 0),
+                          Color.fromARGB(255, 44, 43, 43),
+                        ]
+                      : [
+                          Color.fromARGB(255, 255, 255, 255),
+                          Color.fromARGB(255, 82, 82, 82),
+                        ],
                 ),
                 border: Border.all(
                   color: Color.fromARGB(255, 53, 54, 54),
@@ -80,7 +96,9 @@ class LoopPath extends StatelessWidget {
                 onPressed: /*TODO*/ () => {},
                 child: Icon(
                   Icons.square_rounded,
-                  color: Color.fromARGB(255, 126, 9, 9),
+                  color: context.watch<ThemeChangeNotifier>().isDark
+                      ? Color.fromARGB(255, 126, 9, 9)
+                      : Color.fromARGB(255, 196, 22, 22),
                   size: 25,
                 ),
               ),
