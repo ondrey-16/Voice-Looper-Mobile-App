@@ -18,9 +18,23 @@ class SignUpPage extends StatelessWidget {
   }
 }
 
-class SignUpForm extends StatelessWidget {
-  final _textController = TextEditingController();
+class SignUpForm extends StatefulWidget {
+  const SignUpForm();
+  @override
+  State<SignUpForm> createState() => SignUpFormState();
+}
+
+class SignUpFormState extends State<SignUpForm> {
+  final _dataController = TextEditingController();
+  final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _dataController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +101,7 @@ class SignUpForm extends StatelessWidget {
           ),
           SeparatedWidget(
             widget: TextFormField(
-              controller: _textController,
+              controller: _dataController,
               readOnly: true,
               decoration: InputDecoration(labelText: 'Birth Date'),
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -100,7 +114,7 @@ class SignUpForm extends StatelessWidget {
                 );
 
                 if (date != null) {
-                  _textController.text = date.toString().split(" ")[0];
+                  _dataController.text = date.toString().split(" ")[0];
                 }
               },
               validator: (value) {
@@ -113,6 +127,7 @@ class SignUpForm extends StatelessWidget {
           ),
           SeparatedWidget(
             widget: TextFormField(
+              controller: _passwordController,
               decoration: InputDecoration(labelText: 'Password'),
               autovalidateMode: AutovalidateMode.onUserInteraction,
               obscureText: true,
@@ -136,8 +151,8 @@ class SignUpForm extends StatelessWidget {
                 if (value == null || value.isEmpty) {
                   return "Password confirmation is required";
                 }
-                if (value.length < 4 || value.length > 32) {
-                  return 'Password must include 4-32 characters';
+                if (value != _passwordController.text) {
+                  return "Passwords are not the same";
                 }
                 return null;
               },
@@ -152,7 +167,6 @@ class SignUpForm extends StatelessWidget {
                   if (!(_formKey.currentState?.validate() ?? false)) {
                     return;
                   }
-
                   context.go('/');
                 },
                 child: Text(
