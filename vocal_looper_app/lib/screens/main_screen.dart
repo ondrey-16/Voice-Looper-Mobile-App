@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../widgets/loop_path.dart';
+import '../widgets/loop_path_buttons_widget.dart';
 import '../theme_change_notifier.dart';
 
 class MainPage extends StatelessWidget {

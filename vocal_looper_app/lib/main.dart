@@ -41,6 +41,21 @@ class MainApp extends StatelessWidget {
           backgroundColor: Color.fromARGB(255, 19, 19, 20),
           elevation: 0,
         ),
+        sliderTheme: const SliderThemeData(
+          activeTrackColor: Color.fromARGB(255, 122, 21, 14),
+          inactiveTrackColor: Color.fromARGB(50, 122, 21, 14),
+          thumbColor: Color.fromARGB(255, 189, 22, 22),
+          overlayColor: Color.fromARGB(20, 189, 22, 22),
+        ),
+        dialogTheme: const DialogThemeData(
+          backgroundColor: Color.fromARGB(255, 19, 19, 20),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color.fromARGB(255, 30, 30, 31),
+            foregroundColor: Colors.white,
+          ),
+        ),
       ),
       theme: ThemeData(
         brightness: Brightness.light,
@@ -57,6 +72,21 @@ class MainApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(
           backgroundColor: Color.fromARGB(255, 245, 245, 245),
           elevation: 0,
+        ),
+        sliderTheme: const SliderThemeData(
+          activeTrackColor: Color.fromARGB(255, 122, 21, 14),
+          inactiveTrackColor: Color.fromARGB(50, 122, 21, 14),
+          thumbColor: Color.fromARGB(255, 189, 22, 22),
+          overlayColor: Color.fromARGB(20, 189, 22, 22),
+        ),
+        dialogTheme: const DialogThemeData(
+          backgroundColor: Color.fromARGB(255, 245, 245, 245),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color.fromARGB(255, 216, 214, 214),
+            foregroundColor: Colors.black,
+          ),
         ),
       ),
       themeMode: (themeProvider.isDark) ? ThemeMode.dark : ThemeMode.light,
