@@ -1,16 +1,28 @@
+import 'dart:async';
+
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:vocal_looper_app/auth/auth_cubit.dart';
+import 'package:vocal_looper_app/auth/auth_service.dart';
+import 'package:vocal_looper_app/firebase_options.dart';
 import 'screens/main_screen.dart';
 import 'screens/sign_up_screen.dart';
 import 'screens/sign_in_screen.dart';
 import 'theme_change_notifier.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   GoRouter.optionURLReflectsImperativeAPIs = true;
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeChangeNotifier(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeChangeNotifier()),
+        BlocProvider(create: (_) => AuthCubit(authService: AuthService())),
+      ],
       child: const MainApp(),
     ),
   );

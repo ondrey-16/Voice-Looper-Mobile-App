@@ -4,7 +4,7 @@ import 'package:vocal_looper_app/models/sound_effects.dart';
 import '../theme_change_notifier.dart';
 import 'modify_loop_path_widget.dart';
 
-class LoopPath extends StatelessWidget {
+class LoopPathWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(

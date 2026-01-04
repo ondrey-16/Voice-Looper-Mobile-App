@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/separated_widget.dart';
+import '../auth/auth_cubit.dart';
 
 class SignUpPage extends StatelessWidget {
   @override
@@ -13,7 +15,27 @@ class SignUpPage extends StatelessWidget {
         ),
         title: Text('Sign up'),
       ),
-      body: SignUpForm(),
+      body: BlocConsumer<AuthCubit, AuthState>(
+        listener: (context, state) {
+          if (state is ErrorState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.error ?? "Unknown error"),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+          if (state is SignedInState) {
+            context.go('/');
+          }
+        },
+        builder: (context, state) {
+          if (state is SigningState) {
+            return Center(child: CircularProgressIndicator());
+          }
+          return SignUpForm();
+        },
+      ),
     );
   }
 }
@@ -25,19 +47,25 @@ class SignUpForm extends StatefulWidget {
 }
 
 class SignUpFormState extends State<SignUpForm> {
+  String? signUpErrorMessage;
+
   final _dataController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
     _dataController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final authCubit = context.watch<AuthCubit>();
+
     return Form(
       key: _formKey,
       child: ListView(
@@ -85,6 +113,7 @@ class SignUpFormState extends State<SignUpForm> {
           ),
           SeparatedWidget(
             widget: TextFormField(
+              controller: _emailController,
               decoration: InputDecoration(labelText: 'Email'),
               autovalidateMode: AutovalidateMode.onUserInteraction,
               keyboardType: TextInputType.emailAddress,
@@ -163,11 +192,15 @@ class SignUpFormState extends State<SignUpForm> {
               width: 120,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                onPressed: () {
+                onPressed: () async {
                   if (!(_formKey.currentState?.validate() ?? false)) {
                     return;
                   }
-                  context.go('/');
+
+                  await authCubit.signUp(
+                    _emailController.text,
+                    _passwordController.text,
+                  );
                 },
                 child: Text(
                   'Submit',

@@ -1,0 +1,25 @@
+{
+	"flutter": {
+		"platforms": {
+			"android": {
+				"default": {
+					"projectId": "vocal-looper-app",
+					"appId": "1:30199814832:android:078d646d71470b4e207975",
+					"fileOutput": "android/app/google-services.json"
+				}
+			},
+			"dart": {
+				"lib/firebase_options.dart": {
+					"projectId": "vocal-looper-app",
+					"configurations": {
+						"android": "1:30199814832:android:078d646d71470b4e207975",
+						"ios": "1:30199814832:ios:652f28e1ccbcd3ec207975",
+						"macos": "1:30199814832:ios:652f28e1ccbcd3ec207975",
+						"web": "1:30199814832:web:de6bcc3bf4c3a57b207975",
+						"windows": "1:30199814832:web:427492bea11ecf54207975"
+					}
+				}
+			}
+		}
+	}
+}

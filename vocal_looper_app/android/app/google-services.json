@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "30199814832",
+    "project_id": "vocal-looper-app",
+    "storage_bucket": "vocal-looper-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:30199814832:android:078d646d71470b4e207975",
+        "android_client_info": {
+          "package_name": "com.example.vocal_looper_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUDdm-YZ1pyPfdssNwjzMoqBZjj7Ame-g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
