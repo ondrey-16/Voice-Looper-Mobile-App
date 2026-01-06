@@ -2,12 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:vocal_looper_app/auth/auth_cubit.dart';
 
 class AuthService {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth _firebaseAuth;
 
-  AuthService();
+  AuthService(FirebaseAuth firebaseAuth) : _firebaseAuth = firebaseAuth;
 
   bool get isSignedIn => _firebaseAuth.currentUser != null;
   String? get userEmail => _firebaseAuth.currentUser?.email;
+  User? get user => _firebaseAuth.currentUser;
 
   Stream<bool> get isSignedInStream =>
       _firebaseAuth.userChanges().map((user) => user != null);
@@ -46,6 +47,10 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       return e.message;
     }
+  }
+
+  Future<void> deleteUser() async {
+    await user?.delete();
   }
 
   Future<void> signOut() async {

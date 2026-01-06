@@ -1,5 +1,6 @@
 import 'dart:async';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +13,7 @@ import 'screens/main_screen.dart';
 import 'screens/sign_up_screen.dart';
 import 'screens/sign_in_screen.dart';
 import 'theme_change_notifier.dart';
+import 'services/user_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +23,17 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeChangeNotifier()),
-        BlocProvider(create: (_) => AuthCubit(authService: AuthService())),
+        Provider(create: (_) => AuthService(FirebaseAuth.instance)),
+        Provider(create: (_) => FirebaseFirestore.instance),
+        ProxyProvider2<FirebaseFirestore, AuthService, UserService>(
+          update: (_, db, auth, __) => UserService(db, auth),
+        ),
+        BlocProvider(
+          create: (context) => AuthCubit(
+            authService: context.read<AuthService>(),
+            userService: context.read<UserService>(),
+          ),
+        ),
       ],
       child: const MainApp(),
     ),

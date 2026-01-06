@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/separated_widget.dart';
 import '../auth/auth_cubit.dart';
+import '../models/user.dart';
 
 class SignUpPage extends StatelessWidget {
   @override
@@ -49,14 +50,18 @@ class SignUpForm extends StatefulWidget {
 class SignUpFormState extends State<SignUpForm> {
   String? signUpErrorMessage;
 
-  final _dataController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _nicknameController = TextEditingController();
   final _emailController = TextEditingController();
+  final _birthdateController = TextEditingController();
+  DateTime _birthdate = DateTime.now();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
-    _dataController.dispose();
+    _birthdateController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -73,6 +78,7 @@ class SignUpFormState extends State<SignUpForm> {
         children: [
           SeparatedWidget(
             widget: TextFormField(
+              controller: _nameController,
               decoration: InputDecoration(labelText: 'Name'),
               autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: (value) {
@@ -85,6 +91,7 @@ class SignUpFormState extends State<SignUpForm> {
           ),
           SeparatedWidget(
             widget: TextFormField(
+              controller: _lastNameController,
               decoration: InputDecoration(labelText: 'Last Name'),
               autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: (value) {
@@ -97,6 +104,7 @@ class SignUpFormState extends State<SignUpForm> {
           ),
           SeparatedWidget(
             widget: TextFormField(
+              controller: _nicknameController,
               decoration: InputDecoration(labelText: 'Nickname'),
               autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: (value) {
@@ -130,7 +138,7 @@ class SignUpFormState extends State<SignUpForm> {
           ),
           SeparatedWidget(
             widget: TextFormField(
-              controller: _dataController,
+              controller: _birthdateController,
               readOnly: true,
               decoration: InputDecoration(labelText: 'Birth Date'),
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -143,7 +151,8 @@ class SignUpFormState extends State<SignUpForm> {
                 );
 
                 if (date != null) {
-                  _dataController.text = date.toString().split(" ")[0];
+                  _birthdateController.text = date.toString().split(" ")[0];
+                  _birthdate = date;
                 }
               },
               validator: (value) {
@@ -196,11 +205,14 @@ class SignUpFormState extends State<SignUpForm> {
                   if (!(_formKey.currentState?.validate() ?? false)) {
                     return;
                   }
-
-                  await authCubit.signUp(
-                    _emailController.text,
-                    _passwordController.text,
+                  final user = UserData(
+                    name: _nameController.text,
+                    lastName: _lastNameController.text,
+                    nickname: _nicknameController.text,
+                    email: _emailController.text,
+                    birthDate: _birthdate,
                   );
+                  await authCubit.signUp(user, _passwordController.text);
                 },
                 child: Text(
                   'Submit',

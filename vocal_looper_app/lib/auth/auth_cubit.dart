@@ -1,14 +1,17 @@
 import 'dart:async';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:vocal_looper_app/models/user.dart';
+import 'package:vocal_looper_app/services/user_service.dart';
 import 'auth_service.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final AuthService authService;
   StreamSubscription<bool>? _sub;
+  final UserService userService;
 
-  AuthCubit({required this.authService}) : super(authService.stateFromAuth) {
+  AuthCubit({required this.authService, required this.userService})
+    : super(authService.stateFromAuth) {
     _sub = authService.isSignedInStream.listen((isSignedIn) {
       emit(authService.stateFromAuth);
     });
@@ -29,18 +32,35 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> signUp(String email, String password) async {
+  Future<void> signUp(UserData user, String password) async {
     emit(SigningState());
     await Future<void>.delayed(const Duration(seconds: 1));
 
-    String? errorMessage = await authService.signUp(
-      email: email,
-      password: password,
-    );
-    if (errorMessage != null) {
-      emit(ErrorState(error: errorMessage));
-    } else {
-      emit(SignedInState(email: email));
+    _sub?.pause();
+    String? errorMessage;
+    try {
+      errorMessage = await authService.signUp(
+        email: user.email,
+        password: password,
+      );
+      if (errorMessage != null) {
+        throw Exception(errorMessage);
+      }
+      final userID = authService.user?.uid;
+
+      if (userID != null) {
+        await userService.addUser(userID, user);
+        emit(SignedInState(email: user.email));
+      } else {
+        throw Exception("User created but session not found");
+      }
+    } catch (e) {
+      authService.deleteUser();
+      emit(
+        ErrorState(error: (errorMessage != null) ? errorMessage : e.toString()),
+      );
+    } finally {
+      _sub?.resume();
     }
   }
 
