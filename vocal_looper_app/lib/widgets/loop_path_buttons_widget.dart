@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 import 'package:record/record.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:vocal_looper_app/loop_service.dart';
 import 'package:vocal_looper_app/models/sound_effects.dart';
 import '../theme_change_notifier.dart';
 import 'modify_loop_path_widget.dart';
@@ -75,12 +75,9 @@ class RecordLoopButton extends StatefulWidget {
 
 class _RecordLoopButtonState extends State<RecordLoopButton> {
   final recorder = AudioRecorder();
-  final player = AudioPlayer();
-  String? _wavFilepath;
   bool isRecording = false;
 
   Future<void> startRecording() async {
-    _wavFilepath = null;
     if (await recorder.hasPermission()) {
       debugPrint("Microphone persmissed!");
       final tempDir = await getTemporaryDirectory();
@@ -105,95 +102,90 @@ class _RecordLoopButtonState extends State<RecordLoopButton> {
     }
   }
 
-  Future<void> stopRecording() async {
-    _wavFilepath = await recorder.stop();
+  Future<String> stopRecording() async {
+    final newPath = await recorder.stop();
 
-    if (_wavFilepath != null) {
-      final file = File(_wavFilepath!);
-      debugPrint(
-        "Saved to: $_wavFilepath of size ${await file.length()} bytes.",
-      );
+    if (newPath != null) {
+      final file = File(newPath);
+      debugPrint("Saved to: $newPath of size ${await file.length()} bytes.");
     }
 
     setState(() {
       isRecording = false;
     });
-  }
 
-  Future<void> playLoopPath() async {
-    await Future.delayed(const Duration(milliseconds: 200));
-    if (await File(_wavFilepath ?? '').exists()) {
-      await player.stop();
-      await player.setVolume(1.0);
-      await player.play(DeviceFileSource(_wavFilepath!));
-    } else {
-      debugPrint('WAV File does not exist');
-    }
+    return newPath ?? '';
   }
 
   @override
   void dispose() {
     recorder.dispose();
-    player.dispose();
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) => SizedBox(
-    width: 80,
-    height: 80,
-    child: Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: LinearGradient(
-          begin: Alignment.bottomLeft,
-          end: Alignment.topRight,
-          colors: context.watch<ThemeChangeNotifier>().isDark
-              ? [Color.fromARGB(255, 0, 0, 0), Color.fromARGB(255, 44, 43, 43)]
-              : [
-                  Color.fromARGB(255, 255, 255, 255),
-                  Color.fromARGB(255, 82, 82, 82),
-                ],
+  Widget build(BuildContext context) {
+    final loopService = context.read<LoopService>();
+    return SizedBox(
+      width: 80,
+      height: 80,
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: LinearGradient(
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+            colors: context.watch<ThemeChangeNotifier>().isDark
+                ? [
+                    Color.fromARGB(255, 0, 0, 0),
+                    Color.fromARGB(255, 44, 43, 43),
+                  ]
+                : [
+                    Color.fromARGB(255, 255, 255, 255),
+                    Color.fromARGB(255, 82, 82, 82),
+                  ],
+          ),
+          border: Border.all(color: Color.fromARGB(255, 53, 54, 54), width: 2),
         ),
-        border: Border.all(color: Color.fromARGB(255, 53, 54, 54), width: 2),
+        child: ElevatedButton(
+          clipBehavior: Clip.antiAlias,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.transparent,
+            padding: EdgeInsets.zero,
+          ),
+          onPressed: () async {
+            if (!isRecording) {
+              await startRecording();
+            } else {
+              final newPath = await stopRecording();
+              if (newPath.isNotEmpty) {
+                loopService.addLoopPath(newPath);
+              }
+            }
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.play_arrow_rounded,
+                color: context.watch<ThemeChangeNotifier>().isDark
+                    ? Color.fromARGB(255, 172, 174, 177)
+                    : Color.fromARGB(255, 57, 57, 58),
+                size: 30,
+              ),
+              Icon(
+                Icons.pause_circle_filled_rounded,
+                color: context.watch<ThemeChangeNotifier>().isDark
+                    ? Color.fromARGB(255, 172, 174, 177)
+                    : Color.fromARGB(255, 57, 57, 58),
+                size: 30,
+              ),
+            ],
+          ),
+        ),
       ),
-      child: ElevatedButton(
-        clipBehavior: Clip.antiAlias,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          padding: EdgeInsets.zero,
-        ),
-        onPressed: () async {
-          if (!isRecording) {
-            await player.stop();
-            await startRecording();
-          } else {
-            await stopRecording();
-            await playLoopPath();
-          }
-        },
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.play_arrow_rounded,
-              color: context.watch<ThemeChangeNotifier>().isDark
-                  ? Color.fromARGB(255, 172, 174, 177)
-                  : Color.fromARGB(255, 57, 57, 58),
-              size: 30,
-            ),
-            Icon(
-              Icons.pause_circle_filled_rounded,
-              color: context.watch<ThemeChangeNotifier>().isDark
-                  ? Color.fromARGB(255, 172, 174, 177)
-                  : Color.fromARGB(255, 57, 57, 58),
-              size: 30,
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
+    );
+  }
 }
 
 class EditLoopSoundButton extends StatefulWidget {

@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:vocal_looper_app/auth/auth_cubit.dart';
 import 'package:vocal_looper_app/auth/auth_service.dart';
 import 'package:vocal_looper_app/firebase_options.dart';
+import 'package:vocal_looper_app/loop_service.dart';
 import 'screens/main_screen.dart';
 import 'screens/sign_up_screen.dart';
 import 'screens/sign_in_screen.dart';
@@ -23,6 +24,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeChangeNotifier()),
+        ChangeNotifierProvider(create: (_) => LoopService()),
         Provider(create: (_) => AuthService(FirebaseAuth.instance)),
         Provider(create: (_) => FirebaseFirestore.instance),
         ProxyProvider2<FirebaseFirestore, AuthService, UserService>(
