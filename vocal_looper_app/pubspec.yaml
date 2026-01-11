@@ -16,6 +16,9 @@ dependencies:
   cloud_firestore: ^5.1.0
   flutter_bloc: ^9.1.1
   equatable: ^2.0.7
+  record: ^6.1.2
+  path_provider: ^2.1.5
+  audioplayers: ^6.5.1
 
 dev_dependencies:
   flutter_test:
