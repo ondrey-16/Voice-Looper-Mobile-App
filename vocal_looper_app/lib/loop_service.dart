@@ -4,31 +4,20 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/widgets.dart';
 
 class LoopService extends ChangeNotifier {
-  final List<AudioPlayer> _players = [];
-  final List<String> _paths = [];
+  final List<AudioPlayer> _players = [
+    for (int i = 0; i < 5; i++) AudioPlayer(),
+  ];
+  final List<String> _paths = [for (int i = 0; i < 5; i++) ''];
 
-  void addLoopPath(String path) async {
+  Future<void> addLoopPath(int num, String path) async {
     if (await File(path).exists()) {
       AudioCache.instance.clearAll();
-      final player = AudioPlayer();
-
-      await player.setPlayerMode(PlayerMode.lowLatency);
-
-      await player.setAudioContext(
-        AudioContext(
-          android: AudioContextAndroid(
-            audioFocus: AndroidAudioFocus.none,
-            contentType: AndroidContentType.music,
-            usageType: AndroidUsageType.media,
-          ),
-        ),
-      );
+      final player = _players[num];
 
       await player.setVolume(1.0);
       await player.setReleaseMode(ReleaseMode.loop);
       await player.play(DeviceFileSource(path));
-      _players.add(player);
-      _paths.add(path);
+      _paths[num] = path;
       notifyListeners();
     } else {
       debugPrint('WAV File does not exist');
@@ -47,10 +36,24 @@ class LoopService extends ChangeNotifier {
     }
   }
 
+  Future<Duration?> getDuration(int num) async {
+    if (num < 0 || num >= 5) {
+      return Duration(seconds: 0);
+    }
+    return await _players[num].getDuration();
+  }
+
   @override
-  void dispose() {
+  void dispose() async {
+    stopAllPaths();
     for (var player in _players) {
       player.dispose();
+    }
+    for (var path in _paths) {
+      final file = File(path);
+      if (await file.exists()) {
+        await file.delete();
+      }
     }
     super.dispose();
   }

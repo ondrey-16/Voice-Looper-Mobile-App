@@ -11,6 +11,10 @@ import '../theme_change_notifier.dart';
 import 'modify_loop_path_widget.dart';
 
 class LoopPathWidget extends StatelessWidget {
+  LoopPathWidget({required this.pathNumber});
+
+  final int pathNumber;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -18,7 +22,7 @@ class LoopPathWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          RecordLoopButton(),
+          RecordLoopButton(pathNumber: pathNumber),
           SizedBox(
             width: 50,
             height: 50,
@@ -68,14 +72,28 @@ class LoopPathWidget extends StatelessWidget {
 }
 
 class RecordLoopButton extends StatefulWidget {
-  const RecordLoopButton();
+  const RecordLoopButton({required this.pathNumber});
+
+  final int pathNumber;
+
   @override
   State<RecordLoopButton> createState() => _RecordLoopButtonState();
 }
 
-class _RecordLoopButtonState extends State<RecordLoopButton> {
+class _RecordLoopButtonState extends State<RecordLoopButton>
+    with SingleTickerProviderStateMixin {
   final recorder = AudioRecorder();
+
+  late AnimationController _animationController;
+
   bool isRecording = false;
+  bool isRecorded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(vsync: this);
+  }
 
   Future<void> startRecording() async {
     if (await recorder.hasPermission()) {
@@ -112,6 +130,7 @@ class _RecordLoopButtonState extends State<RecordLoopButton> {
 
     setState(() {
       isRecording = false;
+      isRecorded = true;
     });
 
     return newPath ?? '';
@@ -119,6 +138,7 @@ class _RecordLoopButtonState extends State<RecordLoopButton> {
 
   @override
   void dispose() {
+    _animationController.dispose();
     recorder.dispose();
     super.dispose();
   }
@@ -147,40 +167,58 @@ class _RecordLoopButtonState extends State<RecordLoopButton> {
           ),
           border: Border.all(color: Color.fromARGB(255, 53, 54, 54), width: 2),
         ),
-        child: ElevatedButton(
-          clipBehavior: Clip.antiAlias,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.transparent,
-            padding: EdgeInsets.zero,
+        child: ScaleTransition(
+          scale: Tween(begin: 1.0, end: 1.1).animate(
+            CurvedAnimation(
+              parent: _animationController,
+              curve: Curves.easeInOut,
+            ),
           ),
-          onPressed: () async {
-            if (!isRecording) {
-              await startRecording();
-            } else {
-              final newPath = await stopRecording();
-              if (newPath.isNotEmpty) {
-                loopService.addLoopPath(newPath);
+          child: ElevatedButton(
+            clipBehavior: Clip.antiAlias,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.transparent,
+              padding: EdgeInsets.zero,
+            ),
+            onPressed: () async {
+              if (isRecorded) {
+                return;
               }
-            }
-          },
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.play_arrow_rounded,
-                color: context.watch<ThemeChangeNotifier>().isDark
-                    ? Color.fromARGB(255, 172, 174, 177)
-                    : Color.fromARGB(255, 57, 57, 58),
-                size: 30,
-              ),
-              Icon(
-                Icons.pause_circle_filled_rounded,
-                color: context.watch<ThemeChangeNotifier>().isDark
-                    ? Color.fromARGB(255, 172, 174, 177)
-                    : Color.fromARGB(255, 57, 57, 58),
-                size: 30,
-              ),
-            ],
+              if (!isRecording) {
+                loopService.stopAllPaths();
+                await startRecording();
+              } else {
+                final newPath = await stopRecording();
+                int num = widget.pathNumber;
+                if (newPath.isNotEmpty) {
+                  await loopService.addLoopPath(num, newPath);
+                }
+                Duration? newDuration = await loopService.getDuration(num);
+                if (newDuration != null) {
+                  _animationController.duration = newDuration;
+                  _animationController.repeat();
+                }
+              }
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.play_arrow_rounded,
+                  color: context.watch<ThemeChangeNotifier>().isDark
+                      ? Color.fromARGB(255, 172, 174, 177)
+                      : Color.fromARGB(255, 57, 57, 58),
+                  size: 30,
+                ),
+                Icon(
+                  Icons.pause_circle_filled_rounded,
+                  color: context.watch<ThemeChangeNotifier>().isDark
+                      ? Color.fromARGB(255, 172, 174, 177)
+                      : Color.fromARGB(255, 57, 57, 58),
+                  size: 30,
+                ),
+              ],
+            ),
           ),
         ),
       ),

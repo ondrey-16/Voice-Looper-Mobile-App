@@ -6,6 +6,7 @@ import '../widgets/loop_path_buttons_widget.dart';
 import '../theme_change_notifier.dart';
 import '../auth/auth_cubit.dart';
 import '../services/user_service.dart';
+import '../widgets/bpm_choice_slider.dart';
 
 class MainPage extends StatelessWidget {
   @override
@@ -72,12 +73,22 @@ class MainPage extends StatelessWidget {
       ),
       appBar: AppBar(title: Text('Vocal Looper')),
       body: Center(
-        child: SizedBox(
-          height: 600,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [for (int i = 0; i < 5; i++) LoopPathWidget()],
-          ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: BPMChoiceSlider(),
+            ),
+            Expanded(
+              flex: 11,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  for (int i = 0; i < 5; i++) LoopPathWidget(pathNumber: i),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
