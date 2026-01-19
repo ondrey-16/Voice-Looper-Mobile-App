@@ -17,12 +17,16 @@ jobs:
 
       - name: Installing dependencies
         run: flutter pub get
+        working-directory: ./vocal_looper_app
 
       - name: Analyzing project code
         run: flutter analyze
+        working-directory: ./vocal_looper_app
 
       - name: Running tests
         run: flutter test
+        working-directory: ./vocal_looper_app
 
       - name: Building Android app
         run: flutter build apk --debug
+        working-directory: ./vocal_looper_app
