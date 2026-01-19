@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:vocal_looper_app/auth/auth_cubit.dart';
 import 'package:vocal_looper_app/auth/auth_service.dart';
+import 'package:vocal_looper_app/bpm_ratio_change_notifier.dart';
 import 'package:vocal_looper_app/firebase_options.dart';
 import 'package:vocal_looper_app/loop_service.dart';
 import 'screens/main_screen.dart';
@@ -20,11 +21,18 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoRouter.optionURLReflectsImperativeAPIs = true;
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(
-    MultiProvider(
+  runApp(MainApp());
+}
+
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeChangeNotifier()),
         ChangeNotifierProvider(create: (_) => LoopService()),
+        ChangeNotifierProvider(create: (_) => BPMRatioChangeNotifier()),
         Provider(create: (_) => AuthService(FirebaseAuth.instance)),
         Provider(create: (_) => FirebaseFirestore.instance),
         ProxyProvider2<FirebaseFirestore, AuthService, UserService>(
@@ -37,13 +45,13 @@ Future<void> main() async {
           ),
         ),
       ],
-      child: const MainApp(),
-    ),
-  );
+      child: const MainAppBody(),
+    );
+  }
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class MainAppBody extends StatelessWidget {
+  const MainAppBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +132,7 @@ final _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => MainPage(),
+      builder: (context, state) => MainPage(key: const Key('mainPage')),
       routes: [
         GoRoute(path: 'sign-up', builder: (context, state) => SignUpPage()),
         GoRoute(path: 'sign-in', builder: (context, state) => SignInPage()),

@@ -6,7 +6,8 @@ class ModifyLoopPathDialog extends StatefulWidget {
   final double delayValueInit;
   final double pitchValueInit;
 
-  ModifyLoopPathDialog({
+  const ModifyLoopPathDialog({
+    super.key,
     required this.reverbValueInit,
     required this.delayValueInit,
     required this.pitchValueInit,

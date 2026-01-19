@@ -11,7 +11,7 @@ import '../theme_change_notifier.dart';
 import 'modify_loop_path_widget.dart';
 
 class LoopPathWidget extends StatelessWidget {
-  LoopPathWidget({required this.pathNumber});
+  const LoopPathWidget({super.key, required this.pathNumber});
 
   final int pathNumber;
 
@@ -72,7 +72,7 @@ class LoopPathWidget extends StatelessWidget {
 }
 
 class RecordLoopButton extends StatefulWidget {
-  const RecordLoopButton({required this.pathNumber});
+  const RecordLoopButton({super.key, required this.pathNumber});
 
   final int pathNumber;
 
@@ -108,7 +108,7 @@ class _RecordLoopButtonState extends State<RecordLoopButton>
         const RecordConfig(
           encoder: AudioEncoder.wav,
           sampleRate: 44100,
-          numChannels: 2,
+          numChannels: 1,
         ),
         path: filePath,
       );
@@ -227,7 +227,7 @@ class _RecordLoopButtonState extends State<RecordLoopButton>
 }
 
 class EditLoopSoundButton extends StatefulWidget {
-  const EditLoopSoundButton();
+  const EditLoopSoundButton({super.key});
   @override
   State<EditLoopSoundButton> createState() => _EditLoopSoundButtonState();
 }

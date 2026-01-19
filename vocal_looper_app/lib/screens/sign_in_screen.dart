@@ -5,9 +5,12 @@ import 'package:vocal_looper_app/auth/auth_cubit.dart';
 import '../widgets/separated_widget.dart';
 
 class SignInPage extends StatelessWidget {
+  const SignInPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: const Key('signInPage'),
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => context.go('/'),
@@ -33,14 +36,16 @@ class SignInPage extends StatelessWidget {
           if (state is SigningState) {
             return Center(child: CircularProgressIndicator());
           }
-          return SignInForm();
+          return SignInForm(key: const Key('signInForm'));
         },
-      )
+      ),
     );
   }
 }
 
 class SignInForm extends StatefulWidget {
+  const SignInForm({super.key});
+
   @override
   State<SignInForm> createState() {
     return _SignInFormState();
@@ -70,6 +75,7 @@ class _SignInFormState extends State<SignInForm> {
         children: [
           SeparatedWidget(
             widget: TextFormField(
+              key: const Key('emailSignInField'),
               controller: _emailController,
               decoration: InputDecoration(labelText: 'Email'),
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -87,6 +93,7 @@ class _SignInFormState extends State<SignInForm> {
           ),
           SeparatedWidget(
             widget: TextFormField(
+              key: const Key('passwordSignInField'),
               controller: _passwordController,
               decoration: InputDecoration(labelText: 'Password'),
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -100,6 +107,7 @@ class _SignInFormState extends State<SignInForm> {
             ),
           ),
           SeparatedWidget(
+            key: const Key('loginButton'),
             widget: Center(
               child: SizedBox(
                 width: 90,
@@ -110,11 +118,11 @@ class _SignInFormState extends State<SignInForm> {
                   onPressed: () async {
                     await authCubit.signInWithEmail(
                       _emailController.text,
-                      _passwordController.text
+                      _passwordController.text,
                     );
                   },
                   child: Text(
-                    'Send',
+                    'Login',
                     style: TextStyle(fontSize: 18, color: Colors.white),
                   ),
                 ),
@@ -124,6 +132,7 @@ class _SignInFormState extends State<SignInForm> {
           ),
           Center(
             child: SizedBox(
+              key: const Key('createNewAccountButton'),
               width: 250,
               height: 50,
               child: ElevatedButton(

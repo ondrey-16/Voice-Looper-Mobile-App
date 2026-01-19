@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class BPMChoiceSlider extends StatefulWidget {
-  const BPMChoiceSlider();
+  const BPMChoiceSlider({super.key});
+  
   @override
   State<StatefulWidget> createState() => _BPMChoiceSliderState();
 }
@@ -28,6 +29,7 @@ class _BPMChoiceSliderState extends State<BPMChoiceSlider> {
                 Expanded(
                   flex: 10,
                   child: Slider(
+                    key: const Key('bpmRatioSlider'),
                     value: chosenRatio.toDouble(),
                     divisions: 191,
                     min: 10,

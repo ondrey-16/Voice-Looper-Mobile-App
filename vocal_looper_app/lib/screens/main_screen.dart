@@ -9,6 +9,7 @@ import '../services/user_service.dart';
 import '../widgets/bpm_choice_slider.dart';
 
 class MainPage extends StatelessWidget {
+  const MainPage({super.key});
   @override
   Widget build(BuildContext context) {
     final authState = context.watch<AuthCubit>().state;
@@ -20,6 +21,7 @@ class MainPage extends StatelessWidget {
           children: [
             if (authState is! SignedInState)
               ListTile(
+                key: const Key('signInTile'),
                 leading: Icon(Icons.logout),
                 title: Text("Sign in"),
                 onTap: () {
@@ -33,24 +35,32 @@ class MainPage extends StatelessWidget {
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return ListTile(
+                      key: const Key('waitTile'),
                       leading: Icon(Icons.timelapse),
                       title: Text('Wait...'),
                     );
                   }
                   UserData user = snapshot.data!;
                   return ListTile(
+                    key: const Key('welcomeUserTile'),
                     leading: Icon(Icons.person),
                     title: Text('Welcome, ${user.nickname}!'),
                   );
                 },
               ),
             ListTile(
+              key: const Key('publicTracksTile'),
               leading: Icon(Icons.music_note),
               title: Text("Public tracks"),
             ),
-            ListTile(leading: Icon(Icons.save), title: Text("Saved tracks")),
+            ListTile(
+              key: const Key('savedTracksTile'),
+              leading: Icon(Icons.save),
+              title: Text("Saved tracks"),
+            ),
             ListTile(leading: Icon(Icons.settings), title: Text("Settings")),
             ListTile(
+              key: const Key('changeThemeTile'),
               leading: Icon(
                 context.watch<ThemeChangeNotifier>().isDark
                     ? Icons.dark_mode
@@ -61,6 +71,7 @@ class MainPage extends StatelessWidget {
             ),
             if (authState is SignedInState)
               ListTile(
+                key: const Key('signOutTile'),
                 leading: Icon(Icons.login),
                 title: Text("Sign out"),
                 onTap: () {
@@ -77,14 +88,15 @@ class MainPage extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
-              child: BPMChoiceSlider(),
+              child: BPMChoiceSlider(key: const Key('bpmSlider')),
             ),
             Expanded(
               flex: 11,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  for (int i = 0; i < 5; i++) LoopPathWidget(pathNumber: i),
+                  for (int i = 0; i < 5; i++)
+                    LoopPathWidget(key: Key('loopPath$i'), pathNumber: i),
                 ],
               ),
             ),

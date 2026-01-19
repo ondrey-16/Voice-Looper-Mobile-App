@@ -7,7 +7,7 @@ class SeparatedWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: height),
+      padding: EdgeInsets.only(bottom: height, left: 20, right: 20),
       child: widget,
     );
   }
