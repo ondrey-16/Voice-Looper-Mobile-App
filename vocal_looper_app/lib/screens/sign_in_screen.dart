@@ -110,7 +110,7 @@ class _SignInFormState extends State<SignInForm> {
             key: const Key('loginButton'),
             widget: Center(
               child: SizedBox(
-                width: 90,
+                width: 100,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,

@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 import 'package:record/record.dart';
+import 'package:vocal_looper_app/bpm_ratio_change_notifier.dart';
 import 'package:vocal_looper_app/loop_service.dart';
 import '../theme_change_notifier.dart';
 
@@ -46,9 +47,6 @@ class _RecordLoopButtonState extends State<RecordLoopButton>
 
   void onLoopServiceStateChange() {
     final dur = _loopService.getDuration(widget.pathNumber);
-    if (dur != null && dur > Duration.zero) {
-      _animationController.duration = dur;
-    }
 
     if (_loopService.loopsPaused[widget.pathNumber]) {
       _animationController.stop();
@@ -63,8 +61,10 @@ class _RecordLoopButtonState extends State<RecordLoopButton>
     }
   }
 
-  Future<void> startRecording() async {
+  Future<String> record(Duration loopPathDuration) async {
     if (await recorder.hasPermission()) {
+      _loopService.pauseAllPaths();
+
       debugPrint("Microphone persmissed!");
       final tempDir = await getTemporaryDirectory();
       final filePath = path.join(
@@ -80,15 +80,12 @@ class _RecordLoopButtonState extends State<RecordLoopButton>
         ),
         path: filePath,
       );
-      setState(() {
-        isRecording = true;
-      });
     } else {
       debugPrint("Microphone not persmissed!");
     }
-  }
 
-  Future<String> stopRecording() async {
+    await Future.delayed(loopPathDuration);
+
     final newPath = await recorder.stop();
 
     if (newPath != null) {
@@ -97,8 +94,8 @@ class _RecordLoopButtonState extends State<RecordLoopButton>
     }
 
     setState(() {
-      isRecording = false;
       isRecorded = true;
+      _animationController.duration = loopPathDuration;
     });
 
     return newPath ?? '';
@@ -114,6 +111,9 @@ class _RecordLoopButtonState extends State<RecordLoopButton>
 
   @override
   Widget build(BuildContext context) {
+    final loopPathDuration = context
+        .watch<BPMRatioChangeNotifier>()
+        .pathDuration;
     return SizedBox(
       width: 80,
       height: 80,
@@ -152,17 +152,12 @@ class _RecordLoopButtonState extends State<RecordLoopButton>
               if (isRecorded) {
                 return;
               }
-              if (!isRecording) {
-                await _loopService.deactivateAudio();
-                await startRecording();
-              } else {
-                final newPath = await stopRecording();
-                await Future.delayed(const Duration(milliseconds: 200));
-                int num = widget.pathNumber;
-                if (newPath.isNotEmpty) {
-                  await _loopService.addLoopPath(num, newPath);
-                  await _loopService.activateAudio();
-                }
+              final newPath = await record(loopPathDuration);
+              await Future.delayed(const Duration(milliseconds: 200));
+              int num = widget.pathNumber;
+              if (newPath.isNotEmpty) {
+                await _loopService.addLoopPath(num, newPath);
+                await _loopService.activateAudio();
               }
             },
             child: Row(

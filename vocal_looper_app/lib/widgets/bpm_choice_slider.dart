@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:vocal_looper_app/bpm_ratio_change_notifier.dart';
 
 class BPMChoiceSlider extends StatefulWidget {
   const BPMChoiceSlider({super.key});
-  
+
   @override
   State<StatefulWidget> createState() => _BPMChoiceSliderState();
 }
@@ -36,6 +38,9 @@ class _BPMChoiceSliderState extends State<BPMChoiceSlider> {
                     max: 200,
                     onChanged: (double val) => setState(() {
                       chosenRatio = val.toInt();
+                      context.read<BPMRatioChangeNotifier>().setDuration(
+                        Duration(milliseconds: (60000 / chosenRatio).toInt()),
+                      );
                     }),
                   ),
                 ),
