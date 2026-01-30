@@ -45,14 +45,12 @@ class _ModifyLoopPathDialogState extends State<ModifyLoopPathDialog> {
               height: 56,
               child: Stack(
                 children: [
-                  Expanded(
-                    child: Center(
+                  Center(
                       child: Text(
                         'Apply/Edit sound effects',
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ),
-                  ),
                   Positioned(
                     right: 0,
                     child: IconButton(

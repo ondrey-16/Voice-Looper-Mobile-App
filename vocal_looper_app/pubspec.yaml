@@ -23,6 +23,8 @@ dependencies:
   test: ^1.26.2
   mocktail: ^1.0.4
   bloc_test: ^10.0.0
+  audio_session: ^0.2.2
+  just_audio: ^0.10.5
 
 dev_dependencies:
   flutter_test:
